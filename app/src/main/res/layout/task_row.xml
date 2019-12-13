@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_marginBottom="15dp"
+        app:contentPadding="15dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/taskTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/laila"
+                android:text="@string/app_name"
+                android:textSize="17sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <CheckBox
+                android:id="@+id/taskTick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/taskTitle"
+                android:layout_alignParentEnd="true"
+                tools:text="Completed">
+
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/taskDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskTitle"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/laila"
+                android:text="@string/app_name"
+                android:textSize="17sp"
+                android:textStyle="italic">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/taskDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskDescription"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/laila"
+                android:text="@string/app_name"
+                android:textSize="17sp"
+                android:textStyle="italic">
+
+            </TextView>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@id/taskDate">
+
+                <Button
+                    android:id="@+id/editBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:drawable/ic_menu_edit">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@android:drawable/ic_delete">
+
+                </Button>
+            </TableRow>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

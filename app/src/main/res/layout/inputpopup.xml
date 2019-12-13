@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:padding="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#f5f5f5">
+
+            <TextView
+                android:id="@+id/popupTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Enter Task"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:layout_marginBottom="10dp">
+
+            </TextView>
+
+
+            <EditText
+                android:id="@+id/taskTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/popupTitle"
+                android:hint="Task Title">
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/taskDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskTitle"
+                android:layout_marginTop="20dp"
+                android:hint="Task Description(Optional)">
+
+            </EditText>
+
+<!--            <Spinner-->
+<!--                android:id="@+id/taskPriority"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_below="@+id/taskDescription">-->
+
+<!--            </Spinner>-->
+
+
+            <Button
+                android:id="@+id/taskDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskDescription"
+                android:layout_marginTop="20dp"
+                android:background="#fff"
+                android:shadowColor="#dafffb"
+                android:textColor="#777"
+                android:text="Pick a Date">
+            </Button>
+
+
+            <Button
+                android:id="@+id/addBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/taskDate"
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:text="Add">
+
+            </Button>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
