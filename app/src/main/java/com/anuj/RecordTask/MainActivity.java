@@ -2,6 +2,7 @@ package com.anuj.RecordTask;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.anuj.RecordTask.data.DatabaseHandler;
@@ -9,23 +10,34 @@ import com.anuj.RecordTask.model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,14 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText taskTitle;
     private EditText taskDescription;
     private Spinner taskPriority;
+    private ArrayAdapter<String> spinnerAdapter;
     private Button dateBtn;
     private Button addBtn;
     private Calendar calendar;
-    private  Calendar prevDate;
     private String dateStr;
     private DatePickerDialog datePickerDialog;
     private Button completedBtn;
     private Button incompletedBtn;
+    private String taskPriorityStr;
+
+    private Boolean prioritySel = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +105,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Getting the object of input datas
         taskTitle = view.findViewById(R.id.taskTitle);
         taskDescription = view.findViewById(R.id.taskDescription);
+
+        // Creating Spinner
+        final List<String> prioritiesList = new ArrayList<>();
+        prioritiesList.add("Select Priority");
+        prioritiesList.add("High");
+        prioritiesList.add("Medium");
+        prioritiesList.add("Low");
+        taskPriority = view.findViewById(R.id.taskPriority);
+        spinnerAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, prioritiesList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return position != 0; // If Position is 0 , then it will return false otherwise true
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view;
+
+                if(position == 0) {
+                    textView.setTextColor(Color.GRAY);
+                }
+                else {
+                    textView.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+
+        };
+//        spinnerAdapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.task_priorities, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        taskPriority.setAdapter(spinnerAdapter);
+        taskPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position > 0) {
+                    taskPriorityStr = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                prioritySel = false;
+            }
+        });
+
+
         addBtn = view.findViewById(R.id.addBtn);
         dateBtn = view.findViewById(R.id.taskDate);
 
@@ -127,11 +190,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Task task = new Task();
                 task.setTaskTitle(taskTitle.getText().toString().trim());
                 task.setTaskDescription(taskDescription.getText().toString().trim());
+                task.setTaskPriority(taskPriorityStr);
                 task.setDate(dateStr);
                 task.setStatus(0);
 
                 if(!task.getTaskTitle().isEmpty()
-                        && task.getDate() != null) {
+                        && task.getDate() != null
+                        && prioritySel) {
                     db.addTask(task);
                     Snackbar.make(v, "Task Added", Snackbar.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {

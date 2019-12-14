@@ -11,6 +11,7 @@ public class Util {
     public static final String KEY_ID = "id";
     public static final String KEY_TITLE = "taskTitle";
     public static final String KEY_DESCRIPTION = "taskDescription";
+    public static final String KEY_PRIORITY = "taskPriority";
     public static final String KEY_DATE = "taskDate";
     public static final String KEY_STATUS = "taskstatus";
 }

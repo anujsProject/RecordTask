@@ -1,5 +1,7 @@
 package com.anuj.RecordTask;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,10 +16,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.anuj.RecordTask.adapter.RecyclerViewAdapter;
@@ -27,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +55,12 @@ public class ListActivity extends AppCompatActivity {
     private  Calendar prevDate;
     private String dateStr;
     private DatePickerDialog datePickerDialog;
+
+
+    private Spinner taskPriority;
+    private ArrayAdapter<String> spinnerAdapter;
+    private String taskPriorityStr;
+    private Boolean prioritySel = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +88,10 @@ public class ListActivity extends AppCompatActivity {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
         else {
-            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.listActivityLayout);
+            LinearLayout linearLayout = findViewById(R.id.listActivityLayout);
             linearLayout.removeView(recyclerView);
             TextView txt1 = new TextView(ListActivity.this);
-            txt1.setText("You have not added any task Yet!");
+            txt1.setText(R.string.not_added_task_msg);
             txt1.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txt1.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -112,6 +124,53 @@ public class ListActivity extends AppCompatActivity {
         // Getting the object of input datas
         taskTitle = view.findViewById(R.id.taskTitle);
         taskDescription = view.findViewById(R.id.taskDescription);
+
+        // Creating Spinner
+        final List<String> prioritiesList = new ArrayList<>();
+        prioritiesList.add("Select Priority");
+        prioritiesList.add("High");
+        prioritiesList.add("Medium");
+        prioritiesList.add("Low");
+        taskPriority = view.findViewById(R.id.taskPriority);
+        spinnerAdapter = new ArrayAdapter<String>(ListActivity.this, android.R.layout.simple_spinner_item, prioritiesList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return position != 0;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view;
+
+                if(position == 0) {
+                    textView.setTextColor(Color.GRAY);
+                }
+                else {
+                    textView.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+
+        };
+       // spinnerAdapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.task_priorities, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        taskPriority.setAdapter(spinnerAdapter);
+        taskPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position > 0) {
+                    taskPriorityStr = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                prioritySel = false;
+            }
+        });
+
         addBtn = view.findViewById(R.id.addBtn);
         dateBtn = view.findViewById(R.id.taskDate);
 
@@ -150,11 +209,13 @@ public class ListActivity extends AppCompatActivity {
                 Task task = new Task();
                 task.setTaskTitle(taskTitle.getText().toString().trim());
                 task.setTaskDescription(taskDescription.getText().toString().trim());
+                task.setTaskPriority(taskPriorityStr);
                 task.setDate(dateStr);
                 task.setStatus(0);
 
                 if(!task.getTaskTitle().isEmpty()
-                        && task.getDate() != null) {
+                        && task.getDate() != null
+                        && prioritySel) {
                     db.addTask(task);
                     Snackbar.make(v, "Task Added", Snackbar.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {

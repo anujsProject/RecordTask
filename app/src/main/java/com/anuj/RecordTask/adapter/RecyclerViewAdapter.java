@@ -3,19 +3,26 @@ package com.anuj.RecordTask.adapter;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +34,7 @@ import com.anuj.RecordTask.data.DatabaseHandler;
 import com.anuj.RecordTask.model.Task;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -53,6 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Task task = taskList.get(position);
         holder.taskTitle.setText(String.format("Task: %s", task.getTaskTitle()));
         holder.taskDescription.setText(String.format("Description: %s", task.getTaskDescription()));
+        holder.taskPriority.setText(String.format("Priority: %s", task.getTaskPriority()));
         holder.taskDate.setText(String.format("To be done on: %s", task.getDate()));
     }
 
@@ -67,26 +76,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView taskTitle;
         private TextView taskDescription;
         private TextView taskDate;
+        private TextView taskPriority;
         private CheckBox checkBox;
-        public Button deleteBtn;
-        public Button editBtn;
+        private Button deleteBtn;
+        private Button editBtn;
 
         //Variables for popup
-        public AlertDialog.Builder builder;
-        public AlertDialog dialog;
-        public LayoutInflater inflater;
-        public EditText taskTitleBox;
-        public EditText taskDescriptionBox;
-        public Button dateBtn;
-        public Button updateBtn;
-        public Calendar calendar;
-        public String dateStr;
-        public DatePickerDialog datePickerDialog;
+        private AlertDialog.Builder builder;
+        private AlertDialog dialog;
+        private LayoutInflater inflater;
+        private EditText taskTitleBox;
+        private EditText taskDescriptionBox;
+        private Spinner taskPriorityBox;
+        private Button dateBtn;
+        private Button updateBtn;
+        private Calendar calendar;
+        private String dateStr;
+        private String taskPriorityStr;
+        private DatePickerDialog datePickerDialog;
+        private ArrayAdapter<String> spinnerAdapter;
 
-        public ViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
             taskTitle = itemView.findViewById(R.id.taskTitle);
             taskDescription = itemView.findViewById(R.id.taskDescription);
+            taskPriority = itemView.findViewById(R.id.taskPriority);
             taskDate = itemView.findViewById(R.id.taskDate);
             checkBox = itemView.findViewById(R.id.taskTick);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
@@ -126,7 +140,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
 
-        public void deleteTask(int id) {
+        private void deleteTask(int id) {
             Log.d("Deleting", " "+id);
             DatabaseHandler db = new DatabaseHandler(context);
             db.deleteTask(id);
@@ -134,19 +148,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             notifyItemRemoved(getAdapterPosition());
 
             // Check whether the ListActivity is empty or not
-            if(db.getCount(0) == 0 || db.getCount(1) == 1) {
-                context.startActivity(new Intent(context, MainActivity.class));
-            }
+//            if(db.getCount(0) == 0) {
+//                // We will think what to do in this scenerio
+//            }
         }
 
-        public void updateStatus(Task task) {
+        private void updateStatus(Task task) {
             DatabaseHandler db = new DatabaseHandler(context);
             db.updateTask(task);
             if(task.getStatus() == 1) {
                 Toast.makeText(context, "Added to Completed Tasks", Toast.LENGTH_SHORT).show();
                 // Check whether the ListActivity is empty or not
-                if(db.getCount(0) == 0)
-                    context.startActivity(new Intent(context, MainActivity.class));
+
+//                if(db.getCount(0) == 0) {
+//                   // We will think what to do in this scenerio
+//                }
             }
             else {
                 Toast.makeText(context, "Removed from Completed Tasks", Toast.LENGTH_SHORT).show();
@@ -156,7 +172,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             notifyItemRemoved(getAdapterPosition());
         }
 
-        public void editTask(final Task task) {
+        private void editTask(final Task task) {
             final int st = task.getStatus();
             builder = new AlertDialog.Builder(context);
             inflater = LayoutInflater.from(context);
@@ -165,14 +181,67 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             // Getting the object of input datas
             taskTitleBox = view.findViewById(R.id.taskTitle);
             taskDescriptionBox = view.findViewById(R.id.taskDescription);
+            taskPriorityBox = view.findViewById(R.id.taskPriority);
             updateBtn = view.findViewById(R.id.addBtn);
-            updateBtn.setText("Update");
+            updateBtn.setText(R.string.update_text);
             dateBtn = view.findViewById(R.id.taskDate);
+
 
             // Populating the View with Task details
             taskTitleBox.setText(task.getTaskTitle());
             taskDescriptionBox.setText(task.getTaskDescription());
             dateBtn.setText(task.getDate());
+
+            // Spinner Code
+            // Creating Spinner
+            final List<String> prioritiesList = new ArrayList<>();
+            prioritiesList.add("Select Priority");
+            prioritiesList.add("High");
+            prioritiesList.add("Medium");
+            prioritiesList.add("Low");
+            spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, prioritiesList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    return position != 0;
+                }
+
+                @Override
+                public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView textView = (TextView) view;
+
+                    if(position == 0) {
+                        textView.setTextColor(Color.GRAY);
+                    }
+                    else {
+                        textView.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+
+            };
+//        spinnerAdapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.task_priorities, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            taskPriorityBox.setAdapter(spinnerAdapter);
+            taskPriorityBox.setSelection(spinnerAdapter.getPosition(task.getTaskPriority()));
+            taskPriorityBox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    if(position > 0) {
+                        taskPriorityStr = parent.getItemAtPosition(position).toString();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent){
+                }
+            });
+
+
+
+            /*-------------------------------------_*/
+
 
             builder.setView(view);
             dialog = builder.create();

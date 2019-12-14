@@ -1,14 +1,26 @@
 package com.anuj.RecordTask.model;
 
+
+import androidx.annotation.NonNull;
+
 public class Task {
     private int taskId;
     private String taskTitle;
     private String taskDescription;
+    private String taskPriority;
     private String date;
     private int status;
 
     public Task() {
 
+    }
+
+    public String getTaskPriority() {
+        return taskPriority;
+    }
+
+    public void setTaskPriority(String taskPriority) {
+        this.taskPriority = taskPriority;
     }
 
     public Task(String taskTitle, String taskDescription, String date, int status) {
@@ -60,6 +72,7 @@ public class Task {
         this.status = status;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Task{" +

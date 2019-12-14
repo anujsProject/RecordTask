@@ -10,6 +10,7 @@ import android.util.Log;
 import com.anuj.RecordTask.Util.Util;
 import com.anuj.RecordTask.model.Task;
 
+import java.io.UTFDataFormatException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +Util.KEY_ID + " INTEGER PRIMARY KEY, "
                 +Util.KEY_TITLE + " TEXT,"
                 +Util.KEY_DESCRIPTION +" TEXT, "
+                +Util.KEY_PRIORITY + " TEXT, "
                 +Util.KEY_DATE + " TEXT, "
                 +Util.KEY_STATUS + " INTEGER );";
 
@@ -47,6 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Util.KEY_TITLE, task.getTaskTitle());
         values.put(Util.KEY_DESCRIPTION, task.getTaskDescription());
+        values.put(Util.KEY_PRIORITY, task.getTaskPriority());
         values.put(Util.KEY_DATE, task.getDate());
         values.put(Util.KEY_STATUS, task.getStatus());
 
@@ -59,7 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Task getTask(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(Util.TASK_TABLE_NAME,
-                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_DATE, Util.KEY_STATUS},
+                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_STATUS},
                 Util.KEY_ID + "=?", new String[] {String.valueOf(id)}, null, null, null);
 
         if(cursor != null)
@@ -70,6 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             task.setTaskId(cursor.getInt(cursor.getColumnIndex(Util.KEY_ID)));
             task.setTaskTitle(cursor.getString(cursor.getColumnIndex(Util.KEY_TITLE)));
             task.setTaskDescription(cursor.getString(cursor.getColumnIndex(Util.KEY_DESCRIPTION)));
+            task.setTaskPriority(cursor.getString(cursor.getColumnIndex(Util.KEY_PRIORITY)));
             task.setDate(cursor.getString(cursor.getColumnIndex(Util.KEY_DATE)));
             task.setStatus(cursor.getInt(cursor.getColumnIndex(Util.KEY_STATUS)));
         }
@@ -86,7 +90,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> taskList = new ArrayList<>();
         Cursor cursor = db.query(Util.TASK_TABLE_NAME,
-                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_DATE, Util.KEY_STATUS},
+                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_STATUS},
                 Util.KEY_STATUS + "=?",
                 new String[]{String.valueOf(st)}, null, null, null);
 
@@ -98,6 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 task.setTaskId(cursor.getInt(cursor.getColumnIndex(Util.KEY_ID)));
                 task.setTaskTitle(cursor.getString(cursor.getColumnIndex(Util.KEY_TITLE)));
                 task.setTaskDescription(cursor.getString(cursor.getColumnIndex(Util.KEY_DESCRIPTION)));
+                task.setTaskPriority(cursor.getString(cursor.getColumnIndex(Util.KEY_PRIORITY)));
                 task.setDate(cursor.getString(cursor.getColumnIndex(Util.KEY_DATE)));
                 task.setStatus(cursor.getInt(cursor.getColumnIndex(Util.KEY_STATUS)));
                 taskList.add(task);
@@ -126,6 +131,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Util.KEY_TITLE, task.getTaskTitle());
         values.put(Util.KEY_DESCRIPTION, task.getTaskDescription());
+        values.put(Util.KEY_PRIORITY, task.getTaskPriority());
         values.put(Util.KEY_DATE, task.getDate());
         values.put(Util.KEY_STATUS, task.getStatus());
         db.update(Util.TASK_TABLE_NAME, values,
