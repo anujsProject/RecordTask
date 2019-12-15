@@ -23,13 +23,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button incompletedBtn;
     private String taskPriorityStr;
 
-    private Boolean prioritySel = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                prioritySel = false;
             }
         });
 
@@ -196,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(!task.getTaskTitle().isEmpty()
                         && task.getDate() != null
-                        && prioritySel) {
+                        && task.getTaskPriority() != null) {
                     db.addTask(task);
                     Snackbar.make(v, "Task Added", Snackbar.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {

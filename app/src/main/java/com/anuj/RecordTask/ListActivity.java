@@ -60,7 +60,6 @@ public class ListActivity extends AppCompatActivity {
     private Spinner taskPriority;
     private ArrayAdapter<String> spinnerAdapter;
     private String taskPriorityStr;
-    private Boolean prioritySel = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +166,6 @@ public class ListActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                prioritySel = false;
             }
         });
 
@@ -215,7 +213,7 @@ public class ListActivity extends AppCompatActivity {
 
                 if(!task.getTaskTitle().isEmpty()
                         && task.getDate() != null
-                        && prioritySel) {
+                        && task.getTaskPriority() != null) {
                     db.addTask(task);
                     Snackbar.make(v, "Task Added", Snackbar.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {

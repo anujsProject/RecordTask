@@ -62,7 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.taskTitle.setText(String.format("Task: %s", task.getTaskTitle()));
         holder.taskDescription.setText(String.format("Description: %s", task.getTaskDescription()));
         holder.taskPriority.setText(String.format("Priority: %s", task.getTaskPriority()));
-        holder.taskDate.setText(String.format("To be done on: %s", task.getDate()));
+        holder.taskDate.setText(String.format("Due date: %s", task.getDate()));
     }
 
 
@@ -95,6 +95,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private String taskPriorityStr;
         private DatePickerDialog datePickerDialog;
         private ArrayAdapter<String> spinnerAdapter;
+
+        // Variable for confirmation popup
+        private Button yesBtn;
+        private Button noBtn;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,12 +144,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
 
-        private void deleteTask(int id) {
-            Log.d("Deleting", " "+id);
-            DatabaseHandler db = new DatabaseHandler(context);
-            db.deleteTask(id);
-            taskList.remove(getAdapterPosition());
-            notifyItemRemoved(getAdapterPosition());
+        private void deleteTask(final int id) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            View confView = LayoutInflater.from(context).inflate(R.layout.confirmation_popup, null);
+            yesBtn = confView.findViewById(R.id.yesBtn);
+            noBtn = confView.findViewById(R.id.noBtn);
+            builder.setView(confView);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            yesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHandler db = new DatabaseHandler(context);
+                    db.deleteTask(id);
+                    taskList.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    dialog.dismiss();
+                }
+            });
+
+            noBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
 
             // Check whether the ListActivity is empty or not
 //            if(db.getCount(0) == 0) {

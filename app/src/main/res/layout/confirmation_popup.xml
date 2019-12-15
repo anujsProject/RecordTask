@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/sure_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:text="Are you sure ?">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/yesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sure_text"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/simple_btn"
+            android:minHeight="40dp"
+            android:textColor="@android:color/white"
+            android:text="Yes">
+
+        </Button>
+
+        <Button
+            android:id="@+id/noBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sure_text"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentEnd="true"
+            android:minHeight="40dp"
+            android:background="@drawable/simple_btn"
+            android:textColor="@android:color/white"
+            android:text="No">
+
+        </Button>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>
