@@ -28,6 +28,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +Util.KEY_DESCRIPTION +" TEXT, "
                 +Util.KEY_PRIORITY + " TEXT, "
                 +Util.KEY_DATE + " TEXT, "
+                +Util.KEY_TIME + " TEXT, "
                 +Util.KEY_STATUS + " INTEGER );";
 
         db.execSQL(CREATE_TABLE_COMMAND);
@@ -51,6 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Util.KEY_DESCRIPTION, task.getTaskDescription());
         values.put(Util.KEY_PRIORITY, task.getTaskPriority());
         values.put(Util.KEY_DATE, task.getDate());
+        values.put(Util.KEY_TIME, task.getTime());
         values.put(Util.KEY_STATUS, task.getStatus());
 
         // Inserting task using insert method
@@ -62,7 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Task getTask(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(Util.TASK_TABLE_NAME,
-                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_STATUS},
+                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_TIME, Util.KEY_STATUS},
                 Util.KEY_ID + "=?", new String[] {String.valueOf(id)}, null, null, null);
 
         if(cursor != null)
@@ -75,6 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             task.setTaskDescription(cursor.getString(cursor.getColumnIndex(Util.KEY_DESCRIPTION)));
             task.setTaskPriority(cursor.getString(cursor.getColumnIndex(Util.KEY_PRIORITY)));
             task.setDate(cursor.getString(cursor.getColumnIndex(Util.KEY_DATE)));
+            task.setTime(cursor.getString(cursor.getColumnIndex(Util.KEY_TIME)));
             task.setStatus(cursor.getInt(cursor.getColumnIndex(Util.KEY_STATUS)));
         }
         if (cursor != null) {
@@ -90,7 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> taskList = new ArrayList<>();
         Cursor cursor = db.query(Util.TASK_TABLE_NAME,
-                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_STATUS},
+                new String[] {Util.KEY_ID, Util.KEY_TITLE, Util.KEY_DESCRIPTION, Util.KEY_PRIORITY, Util.KEY_DATE, Util.KEY_TIME, Util.KEY_STATUS},
                 Util.KEY_STATUS + "=?",
                 new String[]{String.valueOf(st)}, null, null, null);
 
@@ -104,6 +107,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 task.setTaskDescription(cursor.getString(cursor.getColumnIndex(Util.KEY_DESCRIPTION)));
                 task.setTaskPriority(cursor.getString(cursor.getColumnIndex(Util.KEY_PRIORITY)));
                 task.setDate(cursor.getString(cursor.getColumnIndex(Util.KEY_DATE)));
+                task.setTime(cursor.getString(cursor.getColumnIndex(Util.KEY_TIME)));
                 task.setStatus(cursor.getInt(cursor.getColumnIndex(Util.KEY_STATUS)));
                 taskList.add(task);
             } while(cursor.moveToNext());
@@ -133,6 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Util.KEY_DESCRIPTION, task.getTaskDescription());
         values.put(Util.KEY_PRIORITY, task.getTaskPriority());
         values.put(Util.KEY_DATE, task.getDate());
+        values.put(Util.KEY_TIME, task.getTime());
         values.put(Util.KEY_STATUS, task.getStatus());
         db.update(Util.TASK_TABLE_NAME, values,
                 Util.KEY_ID + "=?", new String[]{String.valueOf(task.getTaskId())});

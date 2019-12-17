@@ -9,6 +9,7 @@ public class Task {
     private String taskDescription;
     private String taskPriority;
     private String date;
+    private String time;
     private int status;
 
     public Task() {
@@ -28,8 +29,14 @@ public class Task {
         this.taskDescription = taskDescription;
         this.date = date;
         this.status = status;
-        if(taskDescription != null)
-            this.taskDescription = "No Description";
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getTaskId() {
@@ -49,6 +56,7 @@ public class Task {
     }
 
     public String getTaskDescription() {
+        if(taskDescription == null) taskDescription = "None";
         return taskDescription;
     }
 
@@ -80,6 +88,7 @@ public class Task {
                 ", taskTitle='" + taskTitle + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
                 ", date='" + date + '\'' +
+                ", time='" +time +'\'' +
                 ", status=" + status +
                 '}';
     }

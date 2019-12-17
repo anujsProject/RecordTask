@@ -15,9 +15,10 @@
         android:layout_marginBottom="8dp"
         android:lineHeight="28dp"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:textColor="@color/colorAccent"
         android:text="Quick Note: "
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,8 +34,8 @@
         android:lineHeight="28dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="This is a Simple TODO list App , where you can make your todos. This is the most basic version of the app. It will improve over time"
-        android:textSize="16dp"
+        android:text="@string/note_for_users"
+        android:textSize="16sp"
         android:textStyle="italic"
         android:textColor="#555"
         app:layout_constraintBottom_toTopOf="@+id/fab"
@@ -76,37 +77,15 @@
 
     </TextView>
 
-    <Button
-        android:id="@+id/inCompletedTaskBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/simple_btn"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:text="InCompleted Task"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </Button>
-
-    <Button
-        android:id="@+id/completedTaskBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/simple_btn"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:text="Completeted Task"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.823"
-        app:layout_constraintStart_toEndOf="@+id/inCompletedTaskBtn">
-
-    </Button>
+    <!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/colorAccent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:popupTheme="@style/AppTheme.PopupOverlay"-->
+<!--        app:title="RecordTask"-->
+<!--        app:titleTextColor="@android:color/white" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

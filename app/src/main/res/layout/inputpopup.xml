@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
         <RelativeLayout
             android:padding="24dp"
+            android:id="@+id/relativePopUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#fff">
@@ -54,9 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:textAlignment="center"
-                android:background="@drawable/for_spinner"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:background="@drawable/date_btn"
                 android:layout_below="@+id/taskDescription">
 
             </Spinner>
@@ -69,25 +70,52 @@
                 android:layout_below="@+id/taskPriority"
                 android:layout_marginTop="20dp"
                 android:shadowColor="#dafffb"
-                android:textColor="#777"
+                android:textColor="#333"
                 android:background="#f5f5f5"
                 android:text="@string/pick_a_date_text">
             </Button>
 
+            <CheckBox
+                android:id="@+id/setReminderCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/set_reminder"
+                android:layout_below="@id/taskDate">
+
+            </CheckBox>
+
+            <!--     The Visiblity will be changing       -->
+            <Button
+                android:id="@+id/taskTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/set_time"
+                android:visibility="gone"
+                android:minHeight="40dp"
+                android:layout_below="@id/setReminderCheck"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/date_btn"
+                android:layout_marginTop="20dp">
+
+            </Button>
 
             <Button
                 android:id="@+id/addBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/taskDate"
                 android:background="@drawable/simple_btn"
-                android:textColor="@android:color/white"
+                android:text="@string/add_text"
                 android:layout_marginTop="20dp"
-                android:text="@string/add_text">
+                android:layout_below="@id/taskTime"
+                android:textColor="@android:color/white">
 
             </Button>
 
+
         </RelativeLayout>
+
+
 
 
     </androidx.cardview.widget.CardView>

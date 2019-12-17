@@ -1,6 +1,11 @@
 package com.anuj.RecordTask;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +21,8 @@ import android.widget.TextView;
 import com.anuj.RecordTask.adapter.RecyclerViewAdapter;
 import com.anuj.RecordTask.data.DatabaseHandler;
 import com.anuj.RecordTask.model.Task;
+import com.anuj.RecordTask.ui.TaskNav;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
@@ -23,10 +31,21 @@ public class CompletedActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     private List<Task> taskList;
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_completed);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
 
         DatabaseHandler db = new DatabaseHandler(CompletedActivity.this);
         taskList = db.getAllTask(1);
@@ -40,7 +59,7 @@ public class CompletedActivity extends AppCompatActivity {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
         else {
-            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearCompleted);
+            LinearLayout linearLayout = findViewById(R.id.linearCompleted);
             linearLayout.removeView(recyclerView);
             TextView txt1 = new TextView(CompletedActivity.this);
             txt1.setText("You have not completed any task Yet!");
@@ -54,6 +73,20 @@ public class CompletedActivity extends AppCompatActivity {
             linearLayout.addView(txt1);
 
         }
+
+
+        // Handle the Navigation things
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
+        TaskNav.makeNav(this, drawerLayout, navigationView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

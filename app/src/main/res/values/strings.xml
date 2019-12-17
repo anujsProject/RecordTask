@@ -6,8 +6,12 @@
     <string name="enter_task_text">Enter Task</string>
     <string name="task_title_text">Task Title</string>
     <string name="task_description_optional">Task Description(Optional)</string>
-    <string name="pick_a_date_text">Pick a Date</string>
+    <string name="pick_a_date_text">Due Date</string>
     <string name="add_text">Add</string>
     <string name="update_text">Update</string>
     <string name="not_added_task_msg">You have not added any task Yet!</string>
+    <string name="timeBtn">timeBtn</string>
+    <string name="note_for_users">RecordTask is a TODO list App , where you can make your List your tasks. Its totally adfree, and doesn\'t take any extra permission which will experience. Enjoy!</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="set_time">Set Time</string>
 </resources>
